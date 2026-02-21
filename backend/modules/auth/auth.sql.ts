@@ -1,15 +1,15 @@
 export const AuthSql = {
     createUser: ` 
-        INSERT INTO user (email,phone,password,name,role)
-        VALUES (?,?,?,?,?)
+        INSERT INTO users (email,password_hash,name)
+        VALUES (?,?,?)
     `,
 
     getUserByEmail: `
-        SELECT * FROM user WHERE email = ?
+        SELECT id,email,password_hash,name,is_email_verified,is_deleted FROM users WHERE email = ?
     `,
 
     getUserByPhone: `
-        SELECT * FROM user WHERE phone = ?
+        SELECT id,email,password_hash,name,is_email_verified,is_deleted FROM users WHERE phone = ?
     `,
 
     createSession: `
@@ -20,15 +20,16 @@ export const AuthSql = {
     getUserSession: `
         SELECT * FROM user_session WHERE user_id = ?
     `,
-    findSessionByToken : `
-        SELECT * FROM user_session WHERE refresh_token = ? AND is_revoked = false AND expires_at > NOW()
-    `,
-    
-    revokeSession : `
-        UPDATE user_session SET is_revoked = true WHERE id = ?
+
+    findSessionByToken: `
+        SELECT * FROM user_session WHERE refresh_token = ? AND is_revoked = FALSE AND expires_at > NOW()
     `,
 
-    revokeAllSessions : `
-        UPDATE user_session SET is_revoked = true WHERE user_id = ?
-    `    
+    revokeSession: `
+        UPDATE user_session SET is_revoked = TRUE WHERE id = ?
+    `,
+
+    revokeAllSessions: `
+        UPDATE user_session SET is_revoked = TRUE WHERE user_id = ?
+    `
 }    
