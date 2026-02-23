@@ -13,20 +13,20 @@ export const AuthSql = {
     `,
 
     createSession: `
-        INSERT INTO user_session (user_id,refresh_token,expires_at)
+        INSERT INTO user_sessions (user_id,refresh_token_hash,expires_at)
         VALUES (?,?,?)
     `,
 
     getUserSession: `
-        SELECT * FROM user_session WHERE user_id = ?
+        SELECT * FROM user_sessions WHERE user_id = ?
     `,
 
     findSessionByToken: `
-        SELECT * FROM user_session WHERE refresh_token = ? AND is_revoked = FALSE AND expires_at > NOW()
+        SELECT * FROM user_sessions WHERE refresh_token_hash = ? AND is_revoked = FALSE AND expires_at > NOW()
     `,
 
     revokeSession: `
-        UPDATE user_session SET is_revoked = TRUE WHERE id = ?
+        UPDATE user_sessions SET is_revoked = TRUE WHERE id = ?
     `,
 
     revokeAllSessions: `
